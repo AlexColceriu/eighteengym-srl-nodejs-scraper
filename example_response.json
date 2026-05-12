@@ -1,0 +1,71 @@
+{
+  "source": "18gym.ro",
+  "scrapedAt": "2026-05-12T10:00:00.000Z",
+  "company": "EIGHTEENGYM SRL",
+  "cif": "9829933",
+  "jobs": [
+    {
+      "url": "https://18gym.ro/cariere/#club-manager",
+      "title": "Club manager",
+      "company": "EIGHTEENGYM SRL",
+      "cif": "9829933",
+      "location": [
+        "Cluj Napoca",
+        "București",
+        "Brașov",
+        "Târgu Mureș"
+      ],
+      "tags": ["management", "fitness", "leadership"],
+      "workmode": "on-site",
+      "date": "2026-05-12T10:00:00.000Z",
+      "status": "scraped"
+    },
+    {
+      "url": "https://18gym.ro/cariere/#front-desk-receptie",
+      "title": "Front desk - Recepție",
+      "company": "EIGHTEENGYM SRL",
+      "cif": "9829933",
+      "location": [
+        "Cluj Napoca",
+        "București",
+        "Târgu Mureș"
+      ],
+      "tags": ["customer-service", "reception"],
+      "workmode": "on-site",
+      "date": "2026-05-12T10:00:00.000Z",
+      "status": "scraped"
+    },
+    {
+      "url": "https://18gym.ro/cariere/#antrenor-personal",
+      "title": "Antrenor personal",
+      "company": "EIGHTEENGYM SRL",
+      "cif": "9829933",
+      "location": [
+        "Cluj Napoca",
+        "București",
+        "Brașov",
+        "Târgu Mureș",
+        "Constanța",
+        "Bacău"
+      ],
+      "tags": ["fitness", "coaching", "sport"],
+      "workmode": "on-site",
+      "date": "2026-05-12T10:00:00.000Z",
+      "status": "scraped"
+    },
+    {
+      "url": "https://18gym.ro/cariere/#personal-curatenie",
+      "title": "Personal curățenie",
+      "company": "EIGHTEENGYM SRL",
+      "cif": "9829933",
+      "location": [
+        "Cluj Napoca",
+        "Târgu Mureș"
+      ],
+      "tags": ["cleaning", "maintenance"],
+      "workmode": "on-site",
+      "date": "2026-05-12T10:00:00.000Z",
+      "status": "scraped"
+    }
+  ]
+}

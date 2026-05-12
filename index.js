@@ -81,7 +81,7 @@ async function fetchJobsFromBestjobs() {
 /**
  * Extracts job listings from the careers page
  */
-async function scrapeAllListings(testOnlyOnePage = false) {
+async function scrapeAllListings() {
   console.log("Fetching careers page...");
   const { jobTypes, locations } = await fetchCareersPage();
   console.log(`Found ${jobTypes.length} job types, ${locations.length} locations`);
@@ -123,7 +123,7 @@ async function scrapeAllListings(testOnlyOnePage = false) {
         });
       }
 
-      if (testOnlyOnePage) break;
+
     }
   }
 
@@ -160,27 +160,37 @@ async function main() {
   const testOnlyOnePage = process.argv.includes("--test");
 
   try {
-    console.log("=== Step 1: Get existing jobs count ===");
-    const existingResult = await querySOLR(COMPANY_CIF);
-    const existingCount = existingResult.numFound;
-    console.log(`Found ${existingCount} existing jobs in SOLR`);
+    let existingCount = 0;
+    let localCif = COMPANY_CIF;
+    let companyName = "EIGHTEENGYM SRL";
 
-    console.log("=== Step 2: Validate company via ANAF ===");
-    const { company, cif } = await validateAndGetCompany();
-    COMPANY_NAME = company;
-    const localCif = cif;
+    if (!testOnlyOnePage) {
+      console.log("=== Step 1: Get existing jobs count ===");
+      const existingResult = await querySOLR(COMPANY_CIF);
+      existingCount = existingResult.numFound;
+      console.log(`Found ${existingCount} existing jobs in SOLR`);
+
+      console.log("=== Step 2: Validate company via ANAF ===");
+      const result = await validateAndGetCompany();
+      COMPANY_NAME = result.company;
+      companyName = result.company;
+      localCif = result.cif;
+    } else {
+      console.log("=== TEST MODE: Skipping ANAF and SOLR ===\n");
+      COMPANY_NAME = companyName;
+    }
 
     console.log("=== Step 3: Scrape jobs ===");
-    const rawJobs = await scrapeAllListings(testOnlyOnePage);
+    const rawJobs = await scrapeAllListings();
     const scrapedCount = rawJobs.length;
     console.log(`Jobs scraped: ${scrapedCount}`);
 
-    const jobs = rawJobs.map(job => mapToJobModel(job, localCif));
+    const jobs = rawJobs.map(job => mapToJobModel(job, localCif, companyName));
 
     const payload = {
       source: "18gym.ro",
       scrapedAt: new Date().toISOString(),
-      company: COMPANY_NAME,
+      company: companyName,
       cif: localCif,
       jobs
     };
@@ -188,14 +198,20 @@ async function main() {
     fs.writeFileSync("jobs.json", JSON.stringify(payload, null, 2), "utf-8");
     console.log("Saved jobs.json");
 
-    console.log("\n=== Step 4: Upsert jobs to SOLR ===");
-    await upsertJobs(payload.jobs);
+    if (!testOnlyOnePage) {
+      console.log("\n=== Step 4: Upsert jobs to SOLR ===");
+      await upsertJobs(payload.jobs);
 
-    const finalResult = await querySOLR(COMPANY_CIF);
-    console.log(`\n=== SUMMARY ===`);
-    console.log(`Jobs existing in SOLR before scrape: ${existingCount}`);
-    console.log(`Jobs scraped: ${scrapedCount}`);
-    console.log(`Jobs in SOLR after scrape: ${finalResult.numFound}`);
+      const finalResult = await querySOLR(COMPANY_CIF);
+      console.log(`\n=== SUMMARY ===`);
+      console.log(`Jobs existing in SOLR before scrape: ${existingCount}`);
+      console.log(`Jobs scraped: ${scrapedCount}`);
+      console.log(`Jobs in SOLR after scrape: ${finalResult.numFound}`);
+    } else {
+      console.log(`\n=== TEST SUMMARY ===`);
+      console.log(`Jobs scraped: ${scrapedCount}`);
+      console.log("(SOLR not updated - test mode)");
+    }
 
     console.log("\n=== DONE ===");
   } catch (err) {
