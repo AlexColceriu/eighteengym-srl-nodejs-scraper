@@ -4,16 +4,16 @@
 
 | File | Description |
 |------|-------------|
-| `index.js` | Main scraper - fetches careers page, parses job data, maps to Job Model, upserts to SOLR |
+| `index.js` | Main scraper - fetches careers page, parses job data, maps to Job Model, upserts jobs + company to SOLR |
 | `company.js` | Validates company via ANAF + Peviitor APIs, checks if company is active/inactive |
-| `solr.js` | SOLR operations module - exports querySOLR, deleteJobByUrl, upsertJobs + standalone verify command |
+| `solr.js` | SOLR operations module - exports querySOLR, queryCompanySOLR, deleteJobByUrl, deleteJobsByCIF, upsertJobs, upsertCompany + standalone verify command |
 | `demoanaf.js` | ANAF API module - exports getCompanyFromANAF(cif) and searchCompany(brandName) |
 
 ## Markdown Files
 
 | File | Description |
 |------|-------------|
-| `INSTRUCTIONS.md` | Project documentation - workflow, technologies, how to use |
+| `INSTRUCTIONS.md` → `instructions.md` | Project documentation - workflow, technologies, how to use |
 | `MODEL.md` | Combined job + company schema definitions |
 | `job-model.md` | Job schema definition (Peviitor Core) - fields, types, validation rules |
 | `company-model.md` | Company schema definition (Peviitor Core) - fields, types, validation rules |
