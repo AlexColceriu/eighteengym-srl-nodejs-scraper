@@ -1,0 +1,39 @@
+name: WebScraper 18GYM to Peviitor
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Reason for manual trigger"
+        required: false
+        default: "Manual run"
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run scraper
+        run: npm run scrape
+        env:
+          SOLR_AUTH: ${{ secrets.SOLR_AUTH }}
+
+      - name: Upload jobs.json as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jobs
+          path: jobs.json
+          retention-days: 7
