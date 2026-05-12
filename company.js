@@ -174,7 +174,7 @@ export async function getCompanyData() {
     console.log(`ANAF returned CUI: ${anafData.cui}`);
     console.log(`ANAF status: ${anafData.inactive ? "INACTIVE" : "ACTIVE"}`);
 
-    const company = anafData.name.toUpperCase();
+    const company = anafData.name.toUpperCase().replace(/\.\s*/g, '').trim();
     const cif = anafData.cui.toString();
     const active = !anafData.inactive;
 
@@ -187,7 +187,7 @@ export async function getCompanyData() {
     console.log(`Cached CUI: ${anafData.cui}`);
     console.log(`Cached status: ${anafData.inactive ? "INACTIVE" : "ACTIVE"}`);
 
-    const company = anafData.name.toUpperCase();
+    const company = anafData.name.toUpperCase().replace(/\.\s*/g, '').trim();
     const cif = anafData.cui.toString();
     const active = !anafData.inactive;
 
