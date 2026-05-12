@@ -9,7 +9,7 @@ import * as cheerio from "cheerio";
 import fs from "fs";
 import { fileURLToPath } from "url";
 import { validateAndGetCompany } from "./company.js";
-import { querySOLR, deleteJobByUrl, upsertJobs } from "./solr.js";
+import { querySOLR, deleteJobByUrl, upsertJobs, upsertCompany } from "./solr.js";
 
 const COMPANY_CIF = "9829933";
 const CAREERS_URL = "https://18gym.ro/cariere/";
@@ -175,6 +175,20 @@ async function main() {
       COMPANY_NAME = result.company;
       companyName = result.company;
       localCif = result.cif;
+
+      console.log("\n=== Step 2b: Upsert company to SOLR ===");
+      const companyDoc = {
+        id: localCif,
+        company: companyName,
+        brand: "18GYM",
+        status: "activ",
+        location: ["Alba Iulia", "Arad", "Bacău", "Baia Mare", "Bistrița", "Brașov", "București", "Cluj Napoca", "Câmpia Turzii", "Constanța", "Iași", "Luduș", "Mediaș", "Piatra Neamț", "Satu-Mare", "Sibiu", "Târgu Mureș", "Turda"],
+        website: ["https://18gym.ro"],
+        career: ["https://18gym.ro/cariere/"],
+        lastScraped: new Date().toISOString().split("T")[0],
+        scraperFile: "https://raw.githubusercontent.com/AlexColceriu/eighteengym-srl-nodejs-scraper/main/.github/workflows/scrape.yml"
+      };
+      await upsertCompany(companyDoc);
     } else {
       console.log("=== TEST MODE: Skipping ANAF and SOLR ===\n");
       COMPANY_NAME = companyName;
