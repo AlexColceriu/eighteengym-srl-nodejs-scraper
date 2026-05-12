@@ -11,7 +11,7 @@ import { querySOLR, deleteJobsByCIF } from "./solr.js";
 import { getCompanyFromANAFWithFallback, searchCompany } from "./demoanaf.js";
 
 const Peviitor_API_URL = "https://api.peviitor.ro/v1/company/";
-const COMPANY_BRAND = "18GYM";
+const COMPANY_BRAND = "EIGHTEENGYM";
 
 export function getCompanyBrand() {
   return COMPANY_BRAND;
